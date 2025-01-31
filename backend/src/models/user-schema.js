@@ -1,4 +1,5 @@
 const  mongoose = require("mongoose");
+const bcrypt = require("bcrypt");
 
 const userSchema = new mongoose.Schema({
     
@@ -22,7 +23,6 @@ const userSchema = new mongoose.Schema({
     password : {
         type : String,
         require : true,
-        maxLength : 50,
         validate(value){
                if(!/^(?=.*[A-Z])(?=.*[\W_]).{6,}$/.test(value)) throw new Error("Password should be contain one uppercase, one special character and length should be at least 6")
         }
@@ -41,5 +41,14 @@ const userSchema = new mongoose.Schema({
 }
 );
 
+userSchema.statics.hashing = async (passwordInputFromUser)=>{
+      return await bcrypt.hash(passwordInputFromUser, 10)
+};
+
+userSchema.methods.comparePassword = async function (passwordInputFromUser){
+    const user = this;
+
+    return await bcrypt.compare(passwordInputFromUser, user.password);
+}
 
 module.exports  = mongoose.model("users", userSchema);
