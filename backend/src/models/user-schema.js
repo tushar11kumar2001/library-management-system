@@ -33,6 +33,10 @@ const userSchema = new mongoose.Schema({
         validate(value){
             if(value.length > 3) throw new Error("You can borrow only 3 book");
         }
+    },
+    lastLogin : {
+        type : Date,
+        default : null
     }
     
 },
@@ -47,7 +51,6 @@ userSchema.statics.hashing = async (passwordInputFromUser)=>{
 
 userSchema.methods.comparePassword = async function (passwordInputFromUser){
     const user = this;
-
     return await bcrypt.compare(passwordInputFromUser, user.password);
 }
 
