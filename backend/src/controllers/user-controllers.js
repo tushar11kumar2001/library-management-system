@@ -1,6 +1,7 @@
 const { createNewUser } = require("../services/user-service");
 const { validateSignUpData } = require("../utils/validateDataFromUser");
 const UserModel = require("../models/user-schema");
+const { userAuth } = require("../middleware/auth");
 
 
 module.exports.signupUser = async (req, res)=>{
@@ -48,8 +49,11 @@ module.exports.loginUser = async (req, res)=>{
 
         loggedInUser.lastLogin = new Date();
         await loggedInUser.save();
+        const token = loggedInUser.getJWT();
+        
         res.
         status(200).
+        cookie("libraryAccessToken", token, { expires : new Date(Date.now() + 60*60*1000 )} ).
         json({
                 message : "User log in  successfully",
                 data : loggedInUser
@@ -63,6 +67,7 @@ module.exports.loginUser = async (req, res)=>{
 
 module.exports.userInSystem = async(req, res)=>{
     try{ 
+          
         const { option } = req.params;
         const days = req.query.day;
         const lastDate = new Date();
