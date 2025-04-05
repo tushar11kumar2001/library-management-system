@@ -29,8 +29,17 @@ const userSchema = new mongoose.Schema({
         }
     },
     borrowedBook : {
-        type : [mongoose.Schema.Types.ObjectId],
-        default : [null],
+        type : [{
+            bookId : {
+                type : mongoose.Schema.Types.ObjectId,
+                ref : "books",
+            },
+            day : {
+                type : String,
+                default : "15"
+            }
+        }],
+        default : [],
         validate(value){
             if(value.length > 3) throw new Error("You can borrow only 3 book");
         }

@@ -5,7 +5,7 @@ module.exports.userAuth = async (req, res, next)=>{
         if( !libraryAccessToken ) throw new Error("Session Expire !!");
         
         const _id = UserModel.verifyToken(libraryAccessToken);
-        const loggedInUser = await UserModel.find({ _id });
+        const loggedInUser = await UserModel.findOne({ _id });
         if(!loggedInUser) throw new Error("Session Expire !!");
         
         req.user = loggedInUser;
