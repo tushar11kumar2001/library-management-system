@@ -34,9 +34,9 @@ const userSchema = new mongoose.Schema({
                 type : mongoose.Schema.Types.ObjectId,
                 ref : "books",
             },
-            day : {
-                type : String,
-                default : "15"
+            dueTo : {
+                type : Date,
+                default : new Date().setDate(new Date().getDate() + 10)
             }
         }],
         default : [],

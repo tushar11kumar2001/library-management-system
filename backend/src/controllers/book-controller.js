@@ -47,16 +47,16 @@ module.exports.bookBorrowByUser = async(req, res)=>{
       try{
         const { id } = req.params;
         const book = await BooKModel.findOne({ _id : id });
-        if(!book) throw new Error("This book is not available now !!");
+
+        if(!book) throw new Error("This book is not available in  library, you can request to the admin..");
+        if(!book.availability) throw new Error("This book is temporary unavailable..")
+
         const loggedInUser = req.user;
         loggedInUser.borrowedBook.push({bookId : book._id});
+        book.quantity = --book.quantity;
+        if(book.quantity == 0) book.availability = false;
+        await book.save();
         await loggedInUser.save();
-//*************************************************************************************** */
-        await loggedInUser.populate(
-            loggedInUser.borrowedBook.map((_, index) => `borrowedBook.${index}.bookId`)
-          ); //borrowedBook is an array, not a Mongoose document, so .populate() doesn’t exist on it, .populate() needs to be called on the parent document (loggedInUser).
-        
-/**************************************************************************************** */      
         res.
         status(200).
         json({
