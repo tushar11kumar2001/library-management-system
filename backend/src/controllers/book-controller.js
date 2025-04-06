@@ -28,7 +28,16 @@ module.exports.addBook = async (req, res)=>{
 
 module.exports.getBooks = async (req, res)=>{
     try{
-         const books = await allBook();
+         const { category } = req.query;
+         const { search,name } = req.query;
+         console.log(search,name);
+         
+         let books;
+         if(search) books = await BooKModel.find({ bookName : name })
+         else if(category === "top"){
+            books = await BooKModel.find({});
+            books.sort((a,b)=> b.borrowUsers.length - a.borrowUsers.length)
+         }
          res.
          status(200).
          json({
@@ -74,4 +83,5 @@ module.exports.bookBorrowByUser = async(req, res)=>{
         status(400).
         json({MESSAGE : err.message});
     }
-}
+};
+
