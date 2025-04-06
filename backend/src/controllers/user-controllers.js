@@ -68,20 +68,20 @@ module.exports.loginUser = async (req, res)=>{
 module.exports.userInSystem = async(req, res)=>{
     try{ 
           
-        const { option } = req.params;
+        const { category } = req.params;
         const days = req.query.day;
         const lastDate = new Date();
         lastDate.setDate(lastDate.getDate() - days);
         let totalUsers;
         
-        if(option === "total") totalUsers = await UserModel.find({});
-        else if(option === "active") totalUsers = await UserModel.find({lastLogin : { $gte : lastDate }});
-        else if(option === "new") totalUsers = await UserModel.find({createdAt : { $gte : lastDate }});
+        if(category === "total") totalUsers = await UserModel.find({});
+        else if(category === "active") totalUsers = await UserModel.find({lastLogin : { $gte : lastDate }});
+        else if(category === "new") totalUsers = await UserModel.find({createdAt : { $gte : lastDate }});
 
         res.
         status(200).
         json({
-                message : option === "total" ? "Total user in Database" : `Total ${option} user in last ${days} Days`,
+                message : category === "total" ? "Total user in Database" : `Total ${category} user in last ${days} Days`,
                 data : totalUsers
             })
     }catch(err){

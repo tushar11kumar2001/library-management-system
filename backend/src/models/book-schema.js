@@ -23,7 +23,25 @@ const bookSchema = new mongoose.Schema({
       },
       quantity : {
         type : Number,
-        require : true
+        require : true,
+        default : 3
+      },
+      borrowUsers : {
+        type : [{
+            userId : {
+              type : mongoose.Schema.Types.ObjectId,
+              ref : "users"
+            }
+          }],
+        default : [],
+        validate : {
+          validator : (value)=>{
+              const ids = value.map(e => e.userId.toString());
+              const uniqueId = new Set(ids);
+              return value.length === uniqueId.size;
+        },
+        message : "This book is already borrowe by this user"
+        }
       }
       
 });

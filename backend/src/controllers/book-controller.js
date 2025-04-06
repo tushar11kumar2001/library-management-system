@@ -52,11 +52,16 @@ module.exports.bookBorrowByUser = async(req, res)=>{
         if(!book.availability) throw new Error("This book is temporary unavailable..")
 
         const loggedInUser = req.user;
+
         loggedInUser.borrowedBook.push({bookId : book._id});
+        // const allowUser = book.borrowUsers.filter((e)=> e.userId.equals(loggedInUser._id));
+        
+        book.borrowUsers.push({userId : loggedInUser._id});
+
         book.quantity = --book.quantity;
         if(book.quantity == 0) book.availability = false;
-        await book.save();
         await loggedInUser.save();
+        await book.save();
         res.
         status(200).
         json({
