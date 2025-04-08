@@ -1,6 +1,7 @@
 const { createNewUser } = require("../services/user-service");
 const { validateSignUpData } = require("../utils/validateDataFromUser");
 const UserModel = require("../models/user-schema");
+const BookModel = require("../models/book-schema");
 
 
 module.exports.signupUser = async (req, res)=>{
@@ -89,4 +90,41 @@ module.exports.userInSystem = async(req, res)=>{
         .json({MESSAGE : err.message});
     }
 
+};
+
+module.exports.userAction = async (req, res)=>{
+    try{
+        const { userId, action, bookId } = req.params;
+        if(!userId || !action || !bookId) throw new Error("something missing userID or action or bookID");
+
+        const user = await UserModel.findOne({ _id: userId });
+        if(!user)throw new Error("User is not found");
+
+        const book = await BookModel.findOne({ _id : bookId });
+        if(!book)throw new Error("Book is not found");
+
+        if(action === "extend"){
+            user.borrowedBook.map(e=>{
+                if(e.bookId.toString() === bookId.toString()){
+                   e.dueTo = new Date(e.dueTo).setDate(new Date(e.dueTo).getDate() + 10)
+                } 
+                
+            });
+            await user.save();
+
+            book.borrowUsers.map(e=>{
+                if(e.userId.toString() === userId.toString()){
+                    e.dueTo = new Date(e.dueTo).setDate(new Date(e.dueTo).getDate() + 10);
+                }
+            });
+            await book.save();
+            res.send("done")
+
+        }
+
+    }catch(err){
+        res
+        .status(400)
+        .json({MESSAGE : err.message});
+    }
 }
