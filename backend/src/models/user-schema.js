@@ -41,7 +41,7 @@ const userSchema = new mongoose.Schema(
           },
           dueTo: {
             type: Date,
-            default: new Date().setDate(new Date().getDate() + 10),
+            default: ()=>new Date(Date.now() + 10 * 24 * 60 * 60 * 1000)
           },
         },
       ],

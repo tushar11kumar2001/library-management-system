@@ -1,5 +1,6 @@
 const { createBook, allBook } = require("../services/book-service");
 const BooKModel = require("../models/book-schema");
+const UserModel = require("../models/user-schema");
 
 module.exports.addBook = async (req, res) => {
   try {
@@ -15,12 +16,16 @@ module.exports.addBook = async (req, res) => {
       );
     const newBook = await createBook({ bookName, author, quantity });
     if (!newBook) throw new Error();
-    res.status(200).json({
+    res
+    .status(200)
+    .json({
       message: "Book added  successfully",
       data: newBook,
     });
   } catch (err) {
-    res.status(400).json({ MESSAGE: err.message });
+    res
+    .status(400)
+    .json({ MESSAGE: err.message });
   }
 };
 
@@ -39,12 +44,11 @@ module.exports.getBooks = async (req, res) => {
       ]);
     } 
     else if (category === "all") {
-      books = await BooKModel.find({})
-                             .select([
-                                "bookName",
-                                "author",
-                                "availability",
-                            ]);
+      books = await BooKModel.find({}).select([
+        "bookName",
+        "author",
+        "availability",
+      ]);
     } 
     else if (category === "borrow") {
       // books = await BooKModel.find({ borrowUsers : {$ne : []} });
@@ -52,12 +56,29 @@ module.exports.getBooks = async (req, res) => {
         $expr: { $gt: [{ $size: "$borrowUsers" }, 0] },
       }).populate("borrowUsers.userId", ["fullName", "emailId"]);
     }
-    res.status(200).json({
+    else if(category === "overdue"){
+        const todayDate = new Date();
+        books = await BooKModel.find({
+            borrowUsers: {
+        
+                $elemMatch: {
+                  dueTo: { $lt: todayDate }
+                },
+      
+              $ne: []
+            }
+          });
+    }
+    res
+    .status(200)
+    .json({
       message: "Successfully",
       data: books,
     });
   } catch (err) {
-    res.status(400).json({ MESSAGE: err.message });
+    res
+    .status(400)
+    .json({ MESSAGE: err.message });
   }
 };
 
@@ -84,11 +105,15 @@ module.exports.bookBorrowByUser = async (req, res) => {
     if (book.remainingQty == 0) book.availability = false;
     await loggedInUser.save();
     await book.save();
-    res.status(200).json({
+    res
+    .status(200)
+    .json({
       message: "Successfull",
       data: loggedInUser,
     });
   } catch (err) {
-    res.status(400).json({ MESSAGE: err.message });
+    res
+    .status(400)
+    .json({ MESSAGE: err.message });
   }
 };

@@ -1,7 +1,6 @@
 const { createNewUser } = require("../services/user-service");
 const { validateSignUpData } = require("../utils/validateDataFromUser");
 const UserModel = require("../models/user-schema");
-const { userAuth } = require("../middleware/auth");
 
 
 module.exports.signupUser = async (req, res)=>{
@@ -23,16 +22,16 @@ module.exports.signupUser = async (req, res)=>{
             });
         if(!newUser) throw new Error;   
         
-        res.
-        status(200).
-        json({
+        res
+        .status(200)
+        .json({
             message : "User register successfully",
             data : newUser
         })
     }catch(err){
-        res.
-        status(400).
-        json({MESSAGE : err.message});
+        res
+        .status(400)
+        .json({MESSAGE : err.message});
     }
     
 };
@@ -51,17 +50,17 @@ module.exports.loginUser = async (req, res)=>{
         await loggedInUser.save();
         const token = loggedInUser.getJWT();
         
-        res.
-        status(200).
-        cookie("libraryAccessToken", token, { expires : new Date(Date.now() + 60*60*1000 )} ).
-        json({
+        res
+        .status(200)
+        .cookie("libraryAccessToken", token, { expires : new Date(Date.now() + 60*60*1000 )} )
+        .json({
                 message : "User log in  successfully",
                 data : loggedInUser
             })
     }catch(err){
-        res.
-        status(400).
-        json({MESSAGE : err.message});
+        res
+        .status(400)
+        .json({MESSAGE : err.message});
     }
 };
 
@@ -78,16 +77,16 @@ module.exports.userInSystem = async(req, res)=>{
         else if(category === "active") totalUsers = await UserModel.find({lastLogin : { $gte : lastDate }});
         else if(category === "new") totalUsers = await UserModel.find({createdAt : { $gte : lastDate }});
 
-        res.
-        status(200).
-        json({
+        res
+        .status(200)
+        .json({
                 message : category === "total" ? "Total user in Database" : `Total ${category} user in last ${days} Days`,
                 data : totalUsers
             })
     }catch(err){
-        res.
-        status(400).
-        json({MESSAGE : err.message});
+        res
+        .status(400)
+        .json({MESSAGE : err.message});
     }
 
 }
