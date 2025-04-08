@@ -21,11 +21,14 @@ const bookSchema = new mongoose.Schema({
         type : Boolean,
         default : true
       },
-      quantity : {
+      totalQty : {
         type : Number,
-        require : true,
         default : 3
       },
+      remainingQty : {
+        type : Number
+      },
+  
       borrowUsers : {
         type : [{
             userId : {
@@ -47,4 +50,11 @@ const bookSchema = new mongoose.Schema({
 });
 
 // bookSchema.index({bookName : 1, author : 1},{unique : true});
+bookSchema.pre("save", function(next){
+  if(this.isNew && this.remainingQty == null){
+    this.remainingQty = this.totalQty;
+  }
+  next();
+});
+
 module.exports = mongoose.model("books",bookSchema);
