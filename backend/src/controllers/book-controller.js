@@ -4,7 +4,7 @@ const UserModel = require("../models/user-schema");
 
 module.exports.addBook = async (req, res) => {
   try {
-    const { bookName, author, quantity } = req.body;
+    const { bookId, bookName, author, quantity } = req.body;
 
     const existingBookWithSameAuthor = await BooKModel.findOne({
       bookName: bookName,
@@ -14,7 +14,7 @@ module.exports.addBook = async (req, res) => {
       throw new Error(
         "This book is already add in database with same author !!"
       );
-    const newBook = await createBook({ bookName, author, quantity });
+    const newBook = await createBook({ bookId, bookName, author, quantity });
     if (!newBook) throw new Error();
     res
     .status(200)
@@ -35,20 +35,35 @@ module.exports.getBooks = async (req, res) => {
     const { search, name } = req.query;
 
     let books;
-    if (search) books = await BooKModel.find({ bookName: name });
+    if (search) books = await BooKModel.find(
+        {
+          $or : [
+            { bookName: { $regex : name, $options : "i"} },
+            { author : {$regex : name, $options : "i"} }
+          ]
+        }
+      ).select({
+      bookId : 1,
+      bookName : 1,
+      author : 1,
+      availability : 1,
+      _id : 0
+  })
     else if (category === "top") {
       books = await BooKModel.aggregate([
         { $addFields: { borrowCount: { $size: "$borrowUsers" } } },
         { $sort: { borrowCount: -1 } },
-        { $project: { bookName: 1, author: 1, availability: 1 } },
+        { $project: { bookId: 1, bookName: 1, author: 1, availability: 1, _id: 0 } },
       ]);
     } 
     else if (category === "all") {
-      books = await BooKModel.find({}).select([
-        "bookName",
-        "author",
-        "availability",
-      ]);
+      books = await BooKModel.find({}).select({
+        bookId : 1,
+        bookName : 1,
+        author : 1,
+        availability : 1,
+        _id : 0
+    });
     } 
     else if (category === "borrow") {
       // books = await BooKModel.find({ borrowUsers : {$ne : []} });
@@ -56,19 +71,19 @@ module.exports.getBooks = async (req, res) => {
         $expr: { $gt: [{ $size: "$borrowUsers" }, 0] },
       }).populate("borrowUsers.userId", ["fullName", "emailId"]);
     }
-    else if(category === "overdue"){
-        const todayDate = new Date();
-        books = await BooKModel.find({
-            borrowUsers: {
+    // else if(category === "overdue"){
+    //     const todayDate = new Date();
+    //     books = await BooKModel.find({
+    //         borrowUsers: {
         
-                $elemMatch: {
-                  dueTo: { $lt: todayDate }
-                },
+    //             $elemMatch: {
+    //               dueTo: { $lt: todayDate }
+    //             },
       
-              $ne: []
-            }
-          });
-    }
+    //           $ne: []
+    //         }
+    //       });
+    // }
     res
     .status(200)
     .json({

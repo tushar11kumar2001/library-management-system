@@ -1,13 +1,11 @@
+import { useDispatch, useSelector } from "react-redux";
 import ActionButton from "./ActionButton";
 import SeeAllButton from "./SeeAllButton";
+import { getAllBooks } from "../redux/BookListSlice";
 
 const BookList = () => {
-  const books = [
-    { id: "B1001", title: "Atomic Habits", author: "James Clear", genre: "Self-help" },
-    { id: "B1023", title: "The Lean Startup", author: "Eric Ries", genre: "Business" },
-    { id: "B1129", title: "1984", author: "George Orwell", genre: "Fiction" },
-    { id: "B1203", title: "Sapiens", author: "Yuval Noah Harari", genre: "History" },
-  ];
+  const dispatch = useDispatch();
+  const allBooks = useSelector(store=>store.bookList.allBooks);
 
   return (
     <div className="bg-white shadow rounded-xl p-4 flex flex-col justify-between h-full">
@@ -23,19 +21,19 @@ const BookList = () => {
                 <th className="pb-2">Book ID</th>
                 <th className="pb-2">Title</th>
                 <th className="pb-2">Author</th>
-                <th className="pb-2">Genre</th>
+
               </tr>
             </thead>
             <tbody>
-              {books.map((book) => (
+              {allBooks.map((book) => (
                 <tr
-                  key={book.id}
+                  key={book.bookId}
                   className="hover:bg-gray-50 text-black border-b border-gray-200"
                 >
-                  <td className="py-2">{book.id}</td>
-                  <td className="py-2">{book.title}</td>
+                  <td className="py-2">{book.bookId}</td>
+                  <td className="py-2">{book.bookName.toUpperCase()}</td>
                   <td className="py-2">{book.author}</td>
-                  <td className="py-2">{book.genre}</td>
+                  
                 </tr>
               ))}
             </tbody>

@@ -5,6 +5,7 @@ import TopChoices from '../component/TopChoices';
 import WelcomeCard from '../component/WelcomeCard';
 
 import { Users, BookOpen, Clock, UserPlus } from 'lucide-react';
+import SearchBooks from './SearchBooks';
 
 const Main = () => {
   return (
@@ -23,6 +24,7 @@ const Main = () => {
         </div>
 
         {/* User & Book List */}
+        <SearchBooks/>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <UserList />
           <BookList />

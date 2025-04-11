@@ -2,7 +2,7 @@ import React from 'react'
 import Header from '../component/Header'
 import Main from '../component/Main'
 
-const DashBoard = () => {
+const AdminDashBoard = () => {
   return (
     <div>
       <Header/>
@@ -11,4 +11,4 @@ const DashBoard = () => {
   )
 }
 
-export default DashBoard
+export default AdminDashBoard

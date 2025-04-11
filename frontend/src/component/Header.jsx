@@ -1,21 +1,47 @@
-import { Bell, Settings } from 'lucide-react';
+import { Bell, Settings, Search, X } from 'lucide-react';
+import { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { emptySearchBooks, SearchBooksThunk } from '../redux/BookListSlice';
 
- const  Header = ()=>{
+const Header = () => {
+  const dispatch = useDispatch();
+  const [searchInput, setSearchInput] = useState("");
+
+  const searchAction = ()=>{
+    const bookName = searchInput.split(" ").join("+");
+    dispatch(SearchBooksThunk(bookName));
+  };
+  const removeSearchAction = ()=>{
+    setSearchInput("");
+    dispatch(emptySearchBooks());
+  }
+
   return (
     <header className="w-full flex items-center justify-between bg-white shadow-md p-4 px-6">
       {/* Left: Logo and Dashboard */}
       <div className="flex items-center gap-4">
         <img src={import.meta.env.VITE_LOGO} alt="Logo" className="h-8 w-auto" />
-        <h1 className="text-xl font-semibold text-gray-800">Dashboard</h1>
+        <h1 className="text-xl font-semibold text-gray-800">BookVault</h1>
       </div>
 
       {/* Center: Search */}
-      <div className="flex-1 max-w-md mx-6">
+      <div className="flex-1 max-w-md mx-6 relative">
+        <Search 
+          onClick={searchAction}
+          className="absolute left-3 top-2.5 text-gray-400 h-5 w-5" />
         <input
           type="text"
-          placeholder="Search ..."
-          className="w-full px-4 py-2 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-pink-500"
+          value={searchInput}
+          onChange={(e) => setSearchInput(e.target.value)}
+          placeholder="Search by name or author..."
+          className="w-full px-10 pr-10 py-2 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-pink-500"
         />
+        {searchInput && (
+          <X
+            className="absolute right-3 top-2.5 text-gray-400 h-5 w-5 cursor-pointer hover:text-gray-600"
+            onClick={removeSearchAction}
+          />
+        )}
       </div>
 
       {/* Right: Notification and Settings */}
