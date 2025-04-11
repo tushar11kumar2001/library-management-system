@@ -1,26 +1,27 @@
 
 import { useDispatch } from "react-redux";
 import AdminDashBoard from "./pages/AdminDashBoard"
-import { BookListThunk } from "./redux/BookListSlice"
 import { useEffect } from "react";
-
-
+import LandingPage from "./pages/LandingPage";
+import { Routes, Route } from "react-router-dom";
 
 
 const App = () => {
-  const dispatch = useDispatch();
 
-  useEffect(()=>{
-    dispatch(BookListThunk());
-  },[])
+  useEffect(() => {
+  }, [])
 
   return (
-    <div className="text-red-600 bg-yellow-400">
-     <AdminDashBoard/>
-    </div>
+    <>
+      <Routes>
+           <Route path="/" element={<LandingPage/>}/>
+           <Route path="/admindashboard" element={<AdminDashBoard/>}/>
+      </Routes>
+    </>
+
   )
 }
 
-export default App
+export default App;
 
 

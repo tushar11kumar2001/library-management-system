@@ -33,7 +33,7 @@ module.exports.getBooks = async (req, res) => {
   try {
     const { category } = req.query;
     const { search, name } = req.query;
-
+    const limit = req.query.limit === "all" ? null : parseInt(req.query.limit) || 3;
     let books;
     if (search) books = await BooKModel.find(
         {
@@ -63,7 +63,7 @@ module.exports.getBooks = async (req, res) => {
         author : 1,
         availability : 1,
         _id : 0
-    });
+    }).limit(limit || 0);
     } 
     else if (category === "borrow") {
       // books = await BooKModel.find({ borrowUsers : {$ne : []} });

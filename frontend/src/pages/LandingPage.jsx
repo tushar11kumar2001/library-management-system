@@ -2,14 +2,13 @@ import React from 'react'
 import Header from '../component/Header'
 import Main from '../component/Main'
 
-const AdminDashBoard = () => {
-  
+const LandingPage = () => {
   return (
     <div>
       <Header/>
-      <Main admin={true}/>
+      <Main landing={true}/>
     </div>
   )
 }
 
-export default AdminDashBoard
+export default LandingPage;
