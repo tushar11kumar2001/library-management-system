@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import BookCard from "./BookCard";
 import { useEffect } from "react";
-import { topChoiceBookListThunk } from "../redux/BookListSlice";
+import { topChoiceBookListThunk } from "../redux/BookSlice";
 
 const TopChoices = () => {
   const dispatch = useDispatch();

@@ -1,7 +1,7 @@
 import { Bell, Settings, Search, X } from 'lucide-react';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { emptySearchBooks, SearchBooksThunk } from '../redux/BookListSlice';
+import { emptySearchBooks, SearchBooksThunk } from '../redux/BookSlice';
 
 const Header = () => {
   const dispatch = useDispatch();

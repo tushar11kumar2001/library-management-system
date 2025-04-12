@@ -1,9 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit"
-import bookListReducers from "./BookListSlice"
+import bookReducers from "./BookSlice"
+import userReducers from "./UserSlice"
 
 const libraryStore = configureStore({
     reducer :{
-        bookList : bookListReducers
+        bookList : bookReducers,
+        userList : userReducers
     }
 
 });

@@ -4,11 +4,14 @@ const jwt = require("jsonwebtoken");
 
 const userSchema = new mongoose.Schema(
   {
+    userId : {
+      type: Number,
+      require: true,
+    },
     fullName: {
       type: String,
       require: true,
     },
-
     emailId: {
       type: String,
       require: true,
@@ -31,6 +34,14 @@ const userSchema = new mongoose.Schema(
             "Password should be contain one uppercase, one special character and length should be at least 6"
           );
       },
+    },
+    department : {
+        type : String,
+        require : true,
+        enum : {
+          values : ["CSE", "IT", "ECE", "EEE"],
+          message : "{VALUE} is not a valid department"
+        }
     },
     borrowedBook: {
       type: [

@@ -29,8 +29,8 @@ export const topChoiceBookListThunk = createAsyncThunk(
     return { topChoiceBookData: topChoiceBookResponse.data.data };
   }
 );
-const BookListSlice = createSlice({
-  name: "BookListSlice",
+const BookSlice = createSlice({
+  name: "BookSlice",
   initialState: {
     allBooks: [],
     topChoiceBooks: [],
@@ -57,5 +57,5 @@ const BookListSlice = createSlice({
   },
 });
 
-export const { getAllBooks, emptySearchBooks } = BookListSlice.actions;
-export default BookListSlice.reducer;
+export const { getAllBooks, emptySearchBooks } = BookSlice.actions;
+export default BookSlice.reducer;

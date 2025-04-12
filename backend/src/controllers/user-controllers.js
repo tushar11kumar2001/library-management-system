@@ -69,19 +69,23 @@ module.exports.userInSystem = async(req, res)=>{
     try{ 
           
         const { category } = req.params;
-        const days = req.query.day;
+        const { day }= req.query;
+        const limit = req.query.limit === "all" ? null : parseInt(req.query.limit)
         const lastDate = new Date();
-        lastDate.setDate(lastDate.getDate() - days);
+        lastDate.setDate(lastDate.getDate() - day);
         let totalUsers;
         
         if(category === "total") totalUsers = await UserModel.find({});
         else if(category === "active") totalUsers = await UserModel.find({lastLogin : { $gte : lastDate }});
         else if(category === "new") totalUsers = await UserModel.find({createdAt : { $gte : lastDate }});
+        else if(category === "withborrowedbooks") totalUsers = await UserModel.find({
+            $expr : { $gt : [{$size : "$borrowedBook"}, 0]}
+        }).limit(limit || 0);
 
         res
         .status(200)
         .json({
-                message : category === "total" ? "Total user in Database" : `Total ${category} user in last ${days} Days`,
+                message : category === "total" ? "Total user in Database" : `Total ${category} user in last ${day} Day`,
                 data : totalUsers
             })
     }catch(err){

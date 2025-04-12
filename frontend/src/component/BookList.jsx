@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import ActionButton from "./ActionButton";
 import SeeAllButton from "./SeeAllButton";
-import { allBookListThunk, getAllBooks } from "../redux/BookListSlice";
+import { allBookListThunk, getAllBooks } from "../redux/BookSlice";
 import BookCard from "./BookCard";
 import { useEffect } from "react";
 
@@ -9,21 +9,20 @@ const BookList = ({ admin, landing }) => {
     
   const dispatch = useDispatch();
   const allBooks = useSelector(store => store.bookList.allBooks);
-
   const seeAllBooks = () => {
-    if (allBooks.length === parseInt(import.meta.env.VITE_BOOK_LIMIT)) dispatch(allBookListThunk("all"));
-    else dispatch(allBookListThunk(import.meta.env.VITE_BOOK_LIMIT));
+    if (allBooks.length === parseInt(import.meta.env.VITE_LIMIT)) dispatch(allBookListThunk("all"));
+    else dispatch(allBookListThunk(import.meta.env.VITE_LIMIT));
   }
 
   useEffect(()=>{
-    dispatch(allBookListThunk(admin ? import.meta.env.VITE_BOOK_LIMIT : "all"));
+    dispatch(allBookListThunk(admin ? import.meta.env.VITE_LIMIT : "all"));
   },[]);
 
   return (
     <>
 
       {admin &&
-        <div className="bg-white shadow rounded-xl p-4 flex flex-col justify-between h-full">
+        <div className="w-1/2 bg-white shadow rounded-xl p-4 flex flex-col justify-between h-full">
           <div >
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-lg font-semibold text-black">Books List</h2>
@@ -55,7 +54,7 @@ const BookList = ({ admin, landing }) => {
             </div>
           </div>
           <div className="flex justify-end mt-2">
-            <SeeAllButton func={seeAllBooks} text={allBooks.length===3?"See all":"Less"} />
+            <SeeAllButton func={seeAllBooks} text={allBooks.length===parseInt(import.meta.env.VITE_LIMIT)?"See all":"Less"} />
           </div>
         </div>
       }
