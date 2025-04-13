@@ -1,13 +1,14 @@
 import React from 'react'
 import Header from '../component/Header'
 import Main from '../component/Main'
+import { Outlet } from 'react-router-dom'
 
 const AdminDashBoard = () => {
   
   return (
     <div>
       <Header/>
-      <Main admin={true}/>
+      <Outlet />
     </div>
   )
 }

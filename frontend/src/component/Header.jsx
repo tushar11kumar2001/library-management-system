@@ -18,13 +18,12 @@ const Header = () => {
 
   return (
     <header className="w-full flex items-center justify-between bg-white shadow-md p-4 px-6">
-      {/* Left: Logo and Dashboard */}
+
       <div className="flex items-center gap-4">
         <img src={import.meta.env.VITE_LOGO} alt="Logo" className="h-8 w-auto" />
         <h1 className="text-xl font-semibold text-gray-800">BookVault</h1>
       </div>
 
-      {/* Center: Search */}
       <div className="flex-1 max-w-md mx-6 relative">
         <Search 
           onClick={searchAction}

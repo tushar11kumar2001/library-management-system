@@ -10,7 +10,6 @@ export const SearchBooksThunk = createAsyncThunk(
     return { searchBooksData: searchBooksResponse.data.data };
   }
 );
-
 export const allBookListThunk = createAsyncThunk(
   "allBookListThunk",
   async (limit) => {
@@ -29,12 +28,22 @@ export const topChoiceBookListThunk = createAsyncThunk(
     return { topChoiceBookData: topChoiceBookResponse.data.data };
   }
 );
+export const BorrowedBookListThunk = createAsyncThunk(
+  "BorrowedBookListThunk",
+  async (limit) => {
+    const borrowedBookResponse = await axios.get(
+      `${import.meta.env.VITE_BASE_URL}/book?category=borrow`
+    );
+    return { borrowedBookData: borrowedBookResponse.data.data };
+  }
+);
 const BookSlice = createSlice({
   name: "BookSlice",
   initialState: {
     allBooks: [],
     topChoiceBooks: [],
     searchBooks: [],
+    borrowedBooks : []
   },
   reducers: {
     getAllBooks: (state, payload) => {
@@ -53,6 +62,9 @@ const BookSlice = createSlice({
     });
     builder.addCase(SearchBooksThunk.fulfilled, (state, action) => {
       state.searchBooks = action.payload.searchBooksData;
+    });
+    builder.addCase(BorrowedBookListThunk.fulfilled, (state, action) => {
+      state.borrowedBooks = action.payload.borrowedBookData;
     });
   },
 });

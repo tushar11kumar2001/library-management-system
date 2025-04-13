@@ -9,7 +9,6 @@ const TopChoices = () => {
   const topChoicesBooks = useSelector(store => store.bookList.topChoiceBooks);
   useEffect(() => {
     dispatch(topChoiceBookListThunk());
-
   }, []);
   return (
     <div className="mt-6">

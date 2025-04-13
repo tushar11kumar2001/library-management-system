@@ -14,7 +14,6 @@ const UserWithBorrowBook = () => {
   }
 
   useEffect(() => {
-    console.log("userlist eff")
     dispatch(UserWithBorrowBookThunk(import.meta.env.VITE_LIMIT));
   }, [])
 
