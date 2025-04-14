@@ -16,16 +16,12 @@ module.exports.addBook = async (req, res) => {
       );
     const newBook = await createBook({ bookId, bookName, author, quantity });
     if (!newBook) throw new Error();
-    res
-    .status(200)
-    .json({
+    res.status(200).json({
       message: "Book added  successfully",
       data: newBook,
     });
   } catch (err) {
-    res
-    .status(400)
-    .json({ MESSAGE: err.message });
+    res.status(400).json({ MESSAGE: err.message });
   }
 };
 
@@ -33,67 +29,71 @@ module.exports.getBooks = async (req, res) => {
   try {
     const { category } = req.query;
     const { search, name } = req.query;
-    const limit = req.query.limit === "all" ? null : parseInt(req.query.limit) || 3;
+    const limit =
+      req.query.limit === "all" ? null : parseInt(req.query.limit) || 3;
     let books;
-    if (search) books = await BooKModel.find(
-        {
-          $or : [
-            { bookName: { $regex : name, $options : "i"} },
-            { author : {$regex : name, $options : "i"} }
-          ]
-        }
-      ).select({
-      bookId : 1,
-      bookName : 1,
-      author : 1,
-      availability : 1,
-      _id : 0
-  })
+    if (search)
+      books = await BooKModel.find({
+        $or: [
+          { bookName: { $regex: name, $options: "i" } },
+          { author: { $regex: name, $options: "i" } },
+        ],
+      }).select({
+        bookId: 1,
+        bookName: 1,
+        author: 1,
+        availability: 1,
+        _id: 0,
+      });
     else if (category === "top") {
       books = await BooKModel.aggregate([
         { $addFields: { borrowCount: { $size: "$borrowUsers" } } },
         { $sort: { borrowCount: -1 } },
-        { $project: { bookId: 1, bookName: 1, author: 1, availability: 1, _id: 0 } },
+        {
+          $project: {
+            bookId: 1,
+            bookName: 1,
+            author: 1,
+            availability: 1,
+            _id: 0,
+          },
+        },
       ]);
-    } 
-    else if (category === "all") {
-      books = await BooKModel.find({}).select({
-        bookId : 1,
-        bookName : 1,
-        author : 1,
-        availability : 1,
-        _id : 0
-    }).limit(limit || 0);
-    } 
-    else if (category === "borrow") {
+    } else if (category === "all") {
+      books = await BooKModel.find({})
+        .select({
+          bookId: 1,
+          bookName: 1,
+          author: 1,
+          availability: 1,
+          _id: 0,
+        })
+        .limit(limit || 0);
+    } else if (category === "borrow") {
       // books = await BooKModel.find({ borrowUsers : {$ne : []} });
       books = await BooKModel.find({
         $expr: { $gt: [{ $size: "$borrowUsers" }, 0] },
-      }).populate("borrowUsers.userId", ["fullName", "emailId"]);
+      }).populate("borrowUsers.userId", ["fullName", "emailId", "userId"]);
     }
     // else if(category === "overdue"){
     //     const todayDate = new Date();
     //     books = await BooKModel.find({
     //         borrowUsers: {
-        
+
     //             $elemMatch: {
     //               dueTo: { $lt: todayDate }
     //             },
-      
+
     //           $ne: []
     //         }
     //       });
     // }
-    res
-    .status(200)
-    .json({
+    res.status(200).json({
       message: "Successfully",
       data: books,
     });
   } catch (err) {
-    res
-    .status(400)
-    .json({ MESSAGE: err.message });
+    res.status(400).json({ MESSAGE: err.message });
   }
 };
 
@@ -120,15 +120,11 @@ module.exports.bookBorrowByUser = async (req, res) => {
     if (book.remainingQty == 0) book.availability = false;
     await loggedInUser.save();
     await book.save();
-    res
-    .status(200)
-    .json({
+    res.status(200).json({
       message: "Successfull",
       data: loggedInUser,
     });
   } catch (err) {
-    res
-    .status(400)
-    .json({ MESSAGE: err.message });
+    res.status(400).json({ MESSAGE: err.message });
   }
 };

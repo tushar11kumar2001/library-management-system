@@ -35,6 +35,7 @@ const BookList = ({ admin, landing }) => {
                     <th className="pb-2">Book ID</th>
                     <th className="pb-2">Title</th>
                     <th className="pb-2">Author</th>
+                    <th className="pb-2">Availability</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -46,6 +47,7 @@ const BookList = ({ admin, landing }) => {
                       <td className="py-2">{book.bookId}</td>
                       <td className="py-2">{book.bookName.toUpperCase()}</td>
                       <td className="py-2">{book.author}</td>
+                      <td className="py-2">{book.availability?"Yes":"No"}</td>
 
                     </tr>
                   ))}

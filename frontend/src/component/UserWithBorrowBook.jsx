@@ -3,14 +3,24 @@ import ActionButton from "./ActionButton";
 import SeeAllButton from "./SeeAllButton";
 import { useDispatch, useSelector } from "react-redux";
 import { UserWithBorrowBookThunk } from "../redux/UserSlice";
+import DialogBox from "./DialogBox";
 
 const UserWithBorrowBook = () => {
-  const dispatch = useDispatch();
 
   const userwithBorrowedBook = useSelector(store => store.userList.userwithBorrowedBook);
+  const dispatch = useDispatch();
+  const [ open, setOpen ] = useState(false);
+  const [ userDetails, setUserDetails ] = useState({});
+
   const SeeAllAction = () => {
-    if (userwithBorrowedBook.length === parseInt(import.meta.env.VITE_LIMIT)) dispatch(UserWithBorrowBookThunk("all"))
-    else dispatch(UserWithBorrowBookThunk(import.meta.env.VITE_LIMIT))
+    if (userwithBorrowedBook.length === parseInt(import.meta.env.VITE_LIMIT))
+      dispatch(UserWithBorrowBookThunk("all"))
+    else
+      dispatch(UserWithBorrowBookThunk(import.meta.env.VITE_LIMIT))
+  };
+
+  const closeAction = () => {
+    setOpen(false);
   }
 
   useEffect(() => {
@@ -18,7 +28,16 @@ const UserWithBorrowBook = () => {
   }, [])
 
   return (
-    <div className="w-1/2 bg-white shadow rounded-xl p-4 flex flex-col justify-between h-full">
+    <div className=" w-1/2 bg-white shadow rounded-xl p-4 flex flex-col justify-between h-full">
+      <DialogBox
+        open={open}
+        userFlag={true}
+        userDetails={userDetails}
+        onClose={closeAction}
+        label="User Details"
+        heading="User Information"
+        subHeading="Borrowed Books"
+      />
       <div>
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-lg font-semibold text-black">List of those user who have issue any book</h2>
@@ -37,6 +56,10 @@ const UserWithBorrowBook = () => {
             <tbody>
               {userwithBorrowedBook?.map((u, idx) => (
                 <tr
+                  onClick={()=>{
+                    setUserDetails(u)
+                    setOpen(true);
+                  }}
                   key={u.userId}
                   className="hover:bg-gray-50 text-black border-b border-gray-200"
                 >
