@@ -38,27 +38,24 @@ module.exports.getBooks = async (req, res) => {
           { bookName: { $regex: name, $options: "i" } },
           { author: { $regex: name, $options: "i" } },
         ],
-      }).select({
+      }).populate("borrowUsers.userId", ["fullName", "emailId", "userId"]).select({
         bookId: 1,
         bookName: 1,
         author: 1,
         availability: 1,
+        borrowUsers:1,
         _id: 0,
       });
     else if (category === "top") {
       books = await BooKModel.aggregate([
-        { $addFields: { borrowCount: { $size: "$borrowUsers" } } },
-        { $sort: { borrowCount: -1 } },
-        {
-          $project: {
-            bookId: 1,
-            bookName: 1,
-            author: 1,
-            availability: 1,
-            _id: 0,
-          },
-        },
+        { $addFields: { borrowCount: { $size: "$borrowUsers" } } }, // calculate borrow count
+        { $sort: { borrowCount: -1 } } // sort ascending
       ]);
+      
+      books = await BooKModel.populate(books, {
+        path: "borrowUsers.userId",
+        select: "fullName emailId userId"
+      });
     } else if (category === "all") {
       books = await BooKModel.find({})
         .select({
