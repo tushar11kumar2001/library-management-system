@@ -117,9 +117,9 @@ module.exports.userAction = async (req, res) => {
         }
       });
       await book.save();
-      res.send("done");
+      res.status(200).json({ MESSAGE: "done" });;
     }
   } catch (err) {
-    res.status(400).json({ MESSAGE: err.message });
+    res.status(400).json({ MESSAGE: "user action"+err.message });
   }
 };

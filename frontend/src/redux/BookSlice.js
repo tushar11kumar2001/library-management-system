@@ -5,7 +5,7 @@ export const SearchBooksThunk = createAsyncThunk(
   "SearchBooksThunk",
   async (bookName) => {
     const searchBooksResponse = await axios.get(
-      `${import.meta.env.VITE_BASE_URL}/book?search=1&name=${bookName}`
+      `/book?search=1&name=${bookName}`
     );
     return { searchBooksData: searchBooksResponse.data.data };
   }
@@ -14,7 +14,7 @@ export const allBookListThunk = createAsyncThunk(
   "allBookListThunk",
   async (limit) => {
     const allBookResponse = await axios.get(
-      `${import.meta.env.VITE_BASE_URL}/book?category=all&limit=${limit}`
+      `/book?category=all&limit=${limit}`
     );
     return { allBookData: allBookResponse.data.data };
   }
@@ -23,7 +23,7 @@ export const topChoiceBookListThunk = createAsyncThunk(
   "topChoiceBookListThunk",
   async (limit) => {
     const topChoiceBookResponse = await axios.get(
-      `${import.meta.env.VITE_BASE_URL}/book?category=top`
+      `/book?category=top`
     );
     return { topChoiceBookData: topChoiceBookResponse.data.data };
   }
@@ -32,7 +32,7 @@ export const BorrowedBookListThunk = createAsyncThunk(
   "BorrowedBookListThunk",
   async (limit) => {
     const borrowedBookResponse = await axios.get(
-      `${import.meta.env.VITE_BASE_URL}/book?category=borrow`
+      `/book?category=borrow`
     );
     return { borrowedBookData: borrowedBookResponse.data.data };
   }
