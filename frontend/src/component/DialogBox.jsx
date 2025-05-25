@@ -33,9 +33,9 @@ const DialogBox = (
     }
 ) => {
     const ExtendAction = async (userId, bookId) => {
-        try {
+        try { 
             const response = await axios.patch(
-                `/user/${userId}/extend/${bookId}`,
+                `/admin/${userId}/extend/${bookId}`,
                 {},
                 {
                     headers: {
@@ -52,7 +52,27 @@ const DialogBox = (
             console.error("ExtendAction error:", error.message);
         }
     };
-
+    const ReleaseAction = async (userId, bookId) => {
+        console.log("Release Action"); 
+        try {
+            const response = await axios.patch(
+                `/admin/${userId}/release/${bookId}`,
+                {},
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    withCredentials: true, // Optional if you're using cookies
+                }
+            );
+            if (response.status === 200) {
+                alert("User time extend successfully")
+                window.location.reload();
+            }
+        } catch (error) {
+            console.error("ExtendAction error:", error.message);
+        }
+    };
     return (
         <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
             <DialogTitle>{label}</DialogTitle>
@@ -121,7 +141,7 @@ const DialogBox = (
                                                 onClick={() => ExtendAction(userDetails._id, book.bookId._id)}>extend date</button> &nbsp;
                                             <button
                                                 className="text-blue-600 border border-blue-600 px-3 py-1 rounded-md text-sm hover:bg-blue-50 transition"
-                                                onClick={() => alert("release action click")}>release</button>
+                                                onClick={() => ReleaseAction(userDetails._id, book.bookId._id)}>release</button>
                                         </TableCell>
                                     </TableRow>
                                 ))

@@ -11,10 +11,10 @@ const StatCard = (
 
     const navigate = useNavigate();
     const navigateAction = ()=>{
-           if(label === "Total Members" ) navigate("/admindashboard/totalusers")
-           if(label === "Active Members" ) navigate("/admindashboard/activeusers")
-           if(label === "New Members" ) navigate("/admindashboard/newusers")
-           if(label === "Borrowed Books" ) navigate("/admindashboard/borrowedbooks")
+           if(label === "Total Members" ) navigate("/dashboard/totalusers")
+           if(label === "Active Members" ) navigate("/dashboard/activeusers")
+           if(label === "New Members" ) navigate("/dashboard/newusers")
+           if(label === "Borrowed Books" ) navigate("/dashboard/borrowedbooks")
     }
   return (
     <div

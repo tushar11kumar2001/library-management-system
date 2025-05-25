@@ -8,6 +8,7 @@ export default defineConfig({
     proxy : {
       '/user': "http://localhost:1100",
       '/book': "http://localhost:1100",
+      '/admin': "http://localhost:1100",
     }
   },
   plugins: [

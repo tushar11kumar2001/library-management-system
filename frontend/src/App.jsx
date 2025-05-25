@@ -14,7 +14,7 @@ const App = () => {
     <>
       <Routes>
            <Route path="/" element={<LandingPage/>}/>
-           <Route path="/admindashboard" element={<AdminDashBoard/>}>
+           <Route path="/dashboard" element={<AdminDashBoard/>}>
               <Route index element={<Main admin={true}/>}/>
               <Route path="totalusers" element={<Render label={"Total Members"}/>}/>
               <Route path="activeusers" element={<Render label={"Active Members"}/>}/>
