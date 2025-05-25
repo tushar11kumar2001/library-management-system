@@ -1,32 +1,34 @@
 import { useDispatch, useSelector } from "react-redux";
 import ActionButton from "./ActionButton";
 import SeeAllButton from "./SeeAllButton";
-import { allBookListThunk, getAllBooks } from "../redux/BookSlice";
+import { AllBookListThunk } from "../redux/BookSlice";
 import BookCard from "./BookCard";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import NewBookForm from "./NewBookForm";
 
 const BookList = ({ admin, landing }) => {
-    
+  
+  const [showNewBookForm, setShowNewBookForm] = useState(false);
   const dispatch = useDispatch();
   const allBooks = useSelector(store => store.bookList.allBooks);
   const seeAllBooks = () => {
-    if (allBooks.length === parseInt(import.meta.env.VITE_LIMIT)) dispatch(allBookListThunk("all"));
-    else dispatch(allBookListThunk(import.meta.env.VITE_LIMIT));
+    if (allBooks.length === parseInt(import.meta.env.VITE_LIMIT)) dispatch(AllBookListThunk("all"));
+    else dispatch(AllBookListThunk(import.meta.env.VITE_LIMIT));
   }
 
   useEffect(()=>{
-    dispatch(allBookListThunk(admin ? import.meta.env.VITE_LIMIT : "all"));
+    dispatch(AllBookListThunk(admin ? import.meta.env.VITE_LIMIT : "all"));
   },[]);
 
   return (
-    <>
-
-      {admin &&
-        <div className="w-1/2 bg-white shadow rounded-xl p-4 flex flex-col justify-between h-full">
+    <div className=" w-1/2">
+      {showNewBookForm && <NewBookForm setShowNewBookForm={setShowNewBookForm}/>}
+      {admin && !showNewBookForm &&
+        <div className="w-full bg-white shadow rounded-xl p-4 flex flex-col justify-between h-full">
           <div >
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-lg font-semibold text-black">Books List</h2>
-              <ActionButton label="Add New Book" onClick={() => alert("Add Book Clicked")} />
+              <ActionButton label="Add New Book" onClick={setShowNewBookForm} />
             </div>
             <div className="overflow-x-auto shadow-sm border-b border-gray-200 rounded-md">
               <table className="w-full text-sm text-left">
@@ -71,7 +73,7 @@ const BookList = ({ admin, landing }) => {
           </div>
         </div>
       }
-    </>
+    </div>
   );
 };
 

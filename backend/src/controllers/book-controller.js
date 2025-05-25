@@ -29,8 +29,7 @@ module.exports.getBooks = async (req, res) => {
   try {
     const { category } = req.query;
     const { search, name } = req.query;
-    const limit =
-      req.query.limit === "all" ? null : parseInt(req.query.limit) || 3;
+    const limit = req.query.limit === "all" ? null : parseInt(req.query.limit) || 3;
     let books;
     if (search)
       books = await BooKModel.find({

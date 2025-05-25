@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import BookCard from "./BookCard";
 import { useEffect, useState } from "react";
-import { topChoiceBookListThunk } from "../redux/BookSlice";
+import { TopChoiceBookListThunk } from "../redux/BookSlice";
 import DialogBox from "./DialogBox";
 
 const TopChoices = () => {
@@ -14,7 +14,7 @@ const TopChoices = () => {
     setOpen(false);
   };
   useEffect(() => {
-    dispatch(topChoiceBookListThunk());
+    dispatch(TopChoiceBookListThunk());
   }, []);
   return (
     <div className="mt-6">

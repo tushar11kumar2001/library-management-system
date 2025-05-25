@@ -1,6 +1,8 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
+
+
 export const SearchBooksThunk = createAsyncThunk(
   "SearchBooksThunk",
   async (bookName) => {
@@ -10,8 +12,9 @@ export const SearchBooksThunk = createAsyncThunk(
     return { searchBooksData: searchBooksResponse.data.data };
   }
 );
-export const allBookListThunk = createAsyncThunk(
-  "allBookListThunk",
+
+export const AllBookListThunk = createAsyncThunk(
+  "AllBookListThunk",
   async (limit) => {
     const allBookResponse = await axios.get(
       `/book?category=all&limit=${limit}`
@@ -19,8 +22,9 @@ export const allBookListThunk = createAsyncThunk(
     return { allBookData: allBookResponse.data.data };
   }
 );
-export const topChoiceBookListThunk = createAsyncThunk(
-  "topChoiceBookListThunk",
+
+export const TopChoiceBookListThunk = createAsyncThunk(
+  "TopChoiceBookListThunk",
   async (limit) => {
     const topChoiceBookResponse = await axios.get(
       `/book?category=top`
@@ -28,6 +32,7 @@ export const topChoiceBookListThunk = createAsyncThunk(
     return { topChoiceBookData: topChoiceBookResponse.data.data };
   }
 );
+
 export const BorrowedBookListThunk = createAsyncThunk(
   "BorrowedBookListThunk",
   async (limit) => {
@@ -37,6 +42,7 @@ export const BorrowedBookListThunk = createAsyncThunk(
     return { borrowedBookData: borrowedBookResponse.data.data };
   }
 );
+
 const BookSlice = createSlice({
   name: "BookSlice",
   initialState: {
@@ -54,10 +60,10 @@ const BookSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(allBookListThunk.fulfilled, (state, action) => {
+    builder.addCase(AllBookListThunk.fulfilled, (state, action) => {
       state.allBooks = action.payload.allBookData;
     });
-    builder.addCase(topChoiceBookListThunk.fulfilled, (state, action) => {
+    builder.addCase(TopChoiceBookListThunk.fulfilled, (state, action) => {
       state.topChoiceBooks = action.payload.topChoiceBookData;
     });
     builder.addCase(SearchBooksThunk.fulfilled, (state, action) => {
