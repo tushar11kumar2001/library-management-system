@@ -21,10 +21,10 @@ const BookList = ({ admin, landing }) => {
   },[]);
 
   return (
-    <div className=" w-1/2">
+    <div className=" w-1/2   min-h-[200px] max-h-[300px]  overflow-scroll overflow-x-hidden booklist-container">
       {showNewBookForm && <NewBookForm setShowNewBookForm={setShowNewBookForm}/>}
       {admin && !showNewBookForm &&
-        <div className="w-full bg-white shadow rounded-xl p-4 flex flex-col justify-between h-full">
+        <div className="w-full  bg-white shadow rounded-xl p-4 flex flex-col justify-between  ">
           <div >
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-lg font-semibold text-black">Books List</h2>

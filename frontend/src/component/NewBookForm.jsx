@@ -18,9 +18,12 @@ const NewBookForm = ({ setShowNewBookForm }) => {
       console.log("Book added successfully:", response.data);
 
       // Clear the input fields after submission
+      alert("Book added successfully");
       setBookId('');
       setBookName('');
       setAuthorName('');
+      window.location.reload();
+
     }).catch((error) => {
       console.error("Error adding book:", error.message);
     });

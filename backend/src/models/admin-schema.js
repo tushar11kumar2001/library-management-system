@@ -7,7 +7,7 @@ const adminSchema = new mongoose.Schema({
         required: true,
         trim: true
     },
-    email: {
+    emailId: {
         type: String,
         required: true,
         unique: true,
@@ -17,7 +17,7 @@ const adminSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    defautPasswordChanged : {
+    defaultPasswordChanged : {
         type : Boolean,
         default : false
     }
@@ -30,6 +30,11 @@ adminSchema.methods.comparePassword = async function(passwordInputFromUser){
     const user = this;
     return await bcrypt.compare(passwordInputFromUser, user.password);
 };
+
+adminSchema.statics.hashing = async function(passwordInputFromUser){
+    return await bcrypt.hash(passwordInputFromUser, 10);
+};
+
 adminSchema.methods.getJWT = function(){
     const user = this;
     return jwt.sign({_id : user._id }, process.env.PRIVATE_KEY)

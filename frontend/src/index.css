@@ -1,1 +1,13 @@
 @import "tailwindcss";
+
+/* index.css */
+.booklist-container::-webkit-scrollbar {
+  width: 8px;
+}
+.booklist-container::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+.booklist-container::-webkit-scrollbar-thumb {
+  background-color: red; /* Tailwind's blue-500 */
+  border-radius: 10px;
+}
